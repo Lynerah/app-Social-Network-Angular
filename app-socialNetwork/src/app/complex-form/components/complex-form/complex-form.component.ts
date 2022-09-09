@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { map, Observable, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'app-complex-form',
@@ -19,13 +20,17 @@ export class ComplexFormComponent implements OnInit {
   confirmPasswordCtrl!: FormControl;
   loginInfoForm!: FormGroup;
 
+  showEmailCtrl$!: Observable<boolean>;
+  showPhoneCtrl$!: Observable<boolean>;
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    this.initMainForm,
+    this.initMainForm();
     this.initFormControls();
+    this.initFormObservables();
   }
+
   
   private initMainForm(): void {
     this.mainForm = this.formBuilder.group({
@@ -57,6 +62,44 @@ export class ComplexFormComponent implements OnInit {
       password: this.passwordCtrl,
       confirmPassword: this.confirmPasswordCtrl
     });
+  }
+
+  private initFormObservables() {
+    this.showEmailCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
+      startWith(this.contactPreferenceCtrl.value),
+      map(preference => preference === 'email'),
+      tap(showEmailCtrl => {
+          if (showEmailCtrl) {
+              this.emailCtrl.addValidators([field validation, visible / hidden
+                  Validators.required,
+                  Validators.email]);
+              this.confirmEmailCtrl.addValidators([
+                  Validators.required,
+                  Validators.email
+              ]);
+          } else {
+              this.emailCtrl.clearValidators();
+              this.confirmEmailCtrl.clearValidators();
+          }
+          this.emailCtrl.updateValueAndValidity();
+          this.confirmEmailCtrl.updateValueAndValidity();
+      })
+    );
+    this.showPhoneCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
+        startWith(this.contactPreferenceCtrl.value),
+        map(preference => preference === 'phone'),
+        tap(showPhoneCtrl => {
+          if (showPhoneCtrl) {
+            this.phoneCtrl.addValidators([
+              Validators.required, 
+              Validators.minLength(10),
+              Validators.maxLength(10)]);
+          } else {
+            this.phoneCtrl.clearValidators();
+          }
+          this.phoneCtrl.updateValueAndValidity();
+        }),
+    );
   }
 
   onSubmitForm() {
