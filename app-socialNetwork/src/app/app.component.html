@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="main-content" color="primary" [formControl]="toggleControl">
+<!-- <div class="main-content" color="primary" [formControl]="toggleControl">
     <mat-toolbar color="primary">
         Angular Dark Mode
         <div class="flex-stretch"></div>
@@ -9,5 +9,38 @@
         <mat-icon>bedtime</mat-icon>
 
     </mat-toolbar>
+    <router-outlet></router-outlet>
+</div> -->
+<div class="main-content">
+    <mat-toolbar>
+        <div class="toggle">
+            <mat-slide-toggle [(ngModel)]="isChecked" (change)="changed($event)">
+                <mat-icon>{{ mode }}</mat-icon>
+            </mat-slide-toggle>
+        </div>
+    </mat-toolbar>
+    <mat-card>
+        <mat-card-title> Hello </mat-card-title>
+        <mat-card-subtitle>
+            complete this form
+        </mat-card-subtitle>
+        <form>
+            <mat-form-field>
+                <input matInput placeholder="Email" />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Full name" />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Password" />
+            </mat-form-field>
+            <button mat-raised-button color="primary">Get Started</button>
+        </form>
+        <mat-card-subtitle>
+            By signing up you are aggreed to our
+            <strong style="letter-spacing: 1px">Terms and conditions</strong>
+        </mat-card-subtitle>
+    </mat-card>
+
     <router-outlet></router-outlet>
 </div>

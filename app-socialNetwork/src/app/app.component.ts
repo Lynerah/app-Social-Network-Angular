@@ -1,5 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
@@ -7,15 +8,25 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  isChecked: boolean = false;
+  mode: string = 'light_mode';
   title = 'app-socialNetwork';
 
-  toggleControl = new FormControl(false);
-  @HostBinding('class') className = '';
+
+
+  // toggleControl = new FormControl(false);
+  // @HostBinding('class') className = '';
 
   ngOnInit(): void {
-    this.toggleControl.valueChanges.subscribe((darkMode) => {
-      const darkClassName = 'darkMode';
-      this.className = darkMode ? darkClassName : '';
-    });
+    // this.toggleControl.valueChanges.subscribe((darkMode) => {
+    //   const darkClassName = 'darkMode';
+    //   this.className = darkMode ? darkClassName : '';
+    // });
   }
+
+  changed(event: MatSlideToggleChange): void {
+    this.mode = event.checked ? 'nightlight_round' : 'light_mode';
+    document.body.classList.toggle('darkMode');
+  }
+
 }
