@@ -8,9 +8,9 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  isChecked: boolean = false;
-  mode: string = 'light_mode';
-  title = 'app-socialNetwork';
+  // isChecked: boolean = false;
+  // mode: string = 'light_mode';
+  // title = 'app-socialNetwork';
 
 
 
@@ -24,9 +24,9 @@ export class AppComponent {
     // });
   }
 
-  changed(event: MatSlideToggleChange): void {
-    this.mode = event.checked ? 'nightlight_round' : 'light_mode';
-    document.body.classList.toggle('darkMode');
-  }
+  // changed(event: MatSlideToggleChange): void {
+  //   this.mode = event.checked ? 'nightlight_round' : 'light_mode';
+  //   document.body.classList.toggle('darkMode');
+  // }
 
 }

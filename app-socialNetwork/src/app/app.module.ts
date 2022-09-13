@@ -7,10 +7,14 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { WayOneThemeComponent } from './way-one-theme/way-one-theme.component';
+import { WayTwoThemeComponent } from './way-two-theme/way-two-theme.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WayOneThemeComponent,
+    WayTwoThemeComponent
   ],
   imports: [
     BrowserModule,
