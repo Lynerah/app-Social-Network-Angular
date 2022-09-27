@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { UserColorPreferenceService } from 'src/app/shared/user-color-preference.service';
 
 @Component({
   selector: 'app-header',
@@ -7,10 +8,26 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  public themes = [
+    {
+      name: 'dark',
+      icon: 'brightness_3'
+    },
+    {
+      name: 'light',
+      icon: 'wb_sunny'
+    }
+  ];
 
+  constructor(public colorSchemeService: UserColorPreferenceService) {
+    this.colorSchemeService.load();
+  }
   ngOnInit(): void {
 
+  }
+
+  setTheme(theme: string) {
+    this.colorSchemeService.update(theme);
   }
 
 }

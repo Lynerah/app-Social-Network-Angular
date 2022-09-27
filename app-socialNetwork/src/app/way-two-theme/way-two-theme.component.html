@@ -1,9 +1,16 @@
 <mat-toolbar>
-    <div class="toggle">
+    <!-- <div class="toggle">
         <mat-slide-toggle [(ngModel)]="isChecked" (change)="changed($event)">
             <mat-icon>{{ mode }}</mat-icon>
         </mat-slide-toggle>
-    </div>
+    </div> -->
+    <mat-nav-list>
+        <mat-list-item *ngFor="let theme of themes" (click)="setTheme(theme.name)">
+            <mat-icon mat-list-icon>{{ theme.icon }}</mat-icon>
+            <h3 matLine>{{ theme.name }}</h3>
+            <mat-icon *ngIf="colorSchemeService.currentActive() === theme.name">check</mat-icon>
+        </mat-list-item>
+    </mat-nav-list>
 </mat-toolbar>
 <mat-card>
     <mat-card-title> Hello </mat-card-title>

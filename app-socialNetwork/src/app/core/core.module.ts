@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
+
 @NgModule({
   declarations: [
     HeaderComponent
@@ -17,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SharedModule,
     RouterModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+
   ],
   exports: [
     HeaderComponent

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { map, Observable, startWith, tap } from 'rxjs';
+import { ComplexFormService } from '../../services/complex-form.service';
+import { confirmEqualValidator } from '../../validators/confirm-equal.validator';
+import { validValidator } from '../../validators/valid.validator';
 
 @Component({
   selector: 'app-complex-form',
@@ -22,16 +25,20 @@ export class ComplexFormComponent implements OnInit {
 
   showEmailCtrl$!: Observable<boolean>;
   showPhoneCtrl$!: Observable<boolean>;
+  showEmailError$!: Observable<boolean>;
+  showPasswordError$!: Observable<boolean>;
 
-  constructor(private formBuilder: FormBuilder) { }
+
+  constructor(private formBuilder: FormBuilder,
+    private complexFormService: ComplexFormService) { }
 
   ngOnInit(): void {
-    this.initMainForm();
     this.initFormControls();
+    this.initMainForm();
     this.initFormObservables();
   }
 
-  
+
   private initMainForm(): void {
     this.mainForm = this.formBuilder.group({
       personalInfo: this.personalInfoForm,
@@ -42,7 +49,7 @@ export class ComplexFormComponent implements OnInit {
     });
   }
 
-  private initFormControls() : void {
+  private initFormControls(): void {
     this.personalInfoForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -53,6 +60,9 @@ export class ComplexFormComponent implements OnInit {
     this.emailForm = this.formBuilder.group({
       email: this.emailCtrl,
       confirm: this.confirmEmailCtrl
+    }, {
+      validators: [confirmEqualValidator('email', 'confirm')],
+      updateOn: 'blur'
     });
     this.phoneCtrl = this.formBuilder.control('');
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
@@ -61,51 +71,66 @@ export class ComplexFormComponent implements OnInit {
       username: ['', Validators.required],
       password: this.passwordCtrl,
       confirmPassword: this.confirmPasswordCtrl
+    }, {
+      validators: [confirmEqualValidator('password', 'confirmPassword')]
     });
   }
 
   private initFormObservables() {
     this.showEmailCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
-        startWith(this.contactPreferenceCtrl.value),
-        map(preference => preference === 'email'),
-        tap(showEmailCtrl => this.setEmailValidators(showEmailCtrl))
+      startWith(this.contactPreferenceCtrl.value),
+      map(preference => preference === 'email'),
+      tap(showEmailCtrl => this.setEmailValidators(showEmailCtrl))
     );
     this.showPhoneCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
-        startWith(this.contactPreferenceCtrl.value),
-        map(preference => preference === 'phone'),
-        tap(showPhoneCtrl => this.setPhoneValidators(showPhoneCtrl))
+      startWith(this.contactPreferenceCtrl.value),
+      map(preference => preference === 'phone'),
+      tap(showPhoneCtrl => this.setPhoneValidators(showPhoneCtrl))
     );
-}
+    this.showEmailError$ = this.emailForm.statusChanges.pipe(
+      map(status => status === 'INVALID' &&
+        this.emailCtrl.value &&
+        this.confirmEmailCtrl.value
+      )
+    );
+    this.showPasswordError$ = this.loginInfoForm.statusChanges.pipe(
+      map(status => status === 'INVALID' &&
+        this.passwordCtrl.value &&
+        this.confirmPasswordCtrl.value &&
+        this.loginInfoForm.hasError('confirmEqual')
+      )
+    );
+  }
 
   private setEmailValidators(showEmailCtrl: boolean) {
-      if (showEmailCtrl) {
-          this.emailCtrl.addValidators([
-              Validators.required,
-              Validators.email
-          ]);
-          this.confirmEmailCtrl.addValidators([
-              Validators.required,
-              Validators.email
-          ]);
-      } else {
-          this.emailCtrl.clearValidators();
-          this.confirmEmailCtrl.clearValidators();
-      }
-      this.emailCtrl.updateValueAndValidity();
-      this.confirmEmailCtrl.updateValueAndValidity();
+    if (showEmailCtrl) {
+      this.emailCtrl.addValidators([
+        Validators.required,
+        Validators.email, validValidator()
+      ]);
+      this.confirmEmailCtrl.addValidators([
+        Validators.required,
+        Validators.email
+      ]);
+    } else {
+      this.emailCtrl.clearValidators();
+      this.confirmEmailCtrl.clearValidators();
+    }
+    this.emailCtrl.updateValueAndValidity();
+    this.confirmEmailCtrl.updateValueAndValidity();
   }
 
   private setPhoneValidators(showPhoneCtrl: boolean) {
-      if (showPhoneCtrl) {
-          this.phoneCtrl.addValidators([
-              Validators.required,
-              Validators.minLength(10),
-              Validators.maxLength(10)
-          ]);
-      } else {
-          this.phoneCtrl.clearValidators();
-      }
-      this.phoneCtrl.updateValueAndValidity();
+    if (showPhoneCtrl) {
+      this.phoneCtrl.addValidators([
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10)
+      ]);
+    } else {
+      this.phoneCtrl.clearValidators();
+    }
+    this.phoneCtrl.updateValueAndValidity();
   }
 
   onSubmitForm() {
@@ -116,13 +141,15 @@ export class ComplexFormComponent implements OnInit {
     if (ctrl.hasError('required')) {
       return 'Ce champ est requis';
     } else if (ctrl.hasError('email')) {
-        return 'Merci d\'entrer une adresse mail valide';
+      return 'Merci d\'entrer une adresse mail valide';
     } else if (ctrl.hasError('minlength')) {
-        return 'Ce numéro de téléphone ne contient pas assez de chiffres';
+      return 'Ce numéro de téléphone ne contient pas assez de chiffres';
     } else if (ctrl.hasError('maxlength')) {
-        return 'Ce numéro de téléphone contient trop de chiffres';
+      return 'Ce numéro de téléphone contient trop de chiffres';
+    } else if (ctrl.hasError('validValidator')) {
+      return 'Ce texte ne contient pas le mot VALID';
     } else {
-        return 'Ce champ contient une erreur';
+      return 'Ce champ contient une erreur';
     }
-}
+  }
 }

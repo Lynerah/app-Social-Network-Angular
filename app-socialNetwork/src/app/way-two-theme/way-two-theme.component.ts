@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { UserColorPreferenceService } from '../shared/user-color-preference.service';
 
 @Component({
   selector: 'app-way-two-theme',
@@ -8,15 +9,36 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 })
 export class WayTwoThemeComponent implements OnInit {
 
-  isChecked: boolean = false;
-  mode: string = 'light_mode';
-  title = 'app-socialNetwork';
+  // isChecked: boolean = false;
+  // mode: string = 'light_mode';
+  // title = 'app-socialNetwork';
 
+  // ngOnInit(): void {
+  // }
+
+  // changed(event: MatSlideToggleChange): void {
+  //   this.mode = event.checked ? 'nightlight_round' : 'light_mode';
+  //   document.body.classList.toggle('darkMode');
+  // }
+  public themes = [
+    {
+      name: 'dark',
+      icon: 'brightness_3'
+    },
+    {
+      name: 'light',
+      icon: 'wb_sunny'
+    }
+  ];
+
+  constructor(public colorSchemeService: UserColorPreferenceService) {
+  }
   ngOnInit(): void {
+
   }
 
-  changed(event: MatSlideToggleChange): void {
-    this.mode = event.checked ? 'nightlight_round' : 'light_mode';
-    document.body.classList.toggle('darkMode');
+  setTheme(theme: string) {
+    this.colorSchemeService.update(theme);
   }
+
 }

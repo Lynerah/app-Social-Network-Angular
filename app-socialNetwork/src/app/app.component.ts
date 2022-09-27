@@ -1,6 +1,7 @@
 import { Component, HostBinding } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { UserColorPreferenceService } from './shared/user-color-preference.service';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,11 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  constructor(private colorSchemeService: UserColorPreferenceService) {
+    // Load Color Scheme
+    this.colorSchemeService.load();
+  }
   // isChecked: boolean = false;
   // mode: string = 'light_mode';
   // title = 'app-socialNetwork';

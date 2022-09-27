@@ -1,6 +1,7 @@
 @import './src/my-theme.scss';
 
 
+
 html,
 body {
     height: 100%;
@@ -24,3 +25,15 @@ a {
         text-decoration: underline;
     }
 }
+
+
+// @media (prefers-color-scheme: dark) {
+//     .darkMode {
+//         @include mat.core-color($dark-theme);
+//         @include mat.all-component-colors($dark-theme);
+//         @include mat.button-color($dark-theme);
+//     }
+// }
+
+
+// box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

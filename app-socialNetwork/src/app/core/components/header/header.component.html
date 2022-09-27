@@ -4,4 +4,18 @@
         <li><a routerLink="/social-media">Social Media</a></li>
         <li><a routerLink="/complex-form">Complex Form</a></li>
     </ul>
+
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Exemple icon-button avec un menu">
+        <mat-icon> more_vert </mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <mat-nav-list>
+            <mat-list-item *ngFor="let theme of themes" (click)="setTheme(theme.name)">
+                <mat-icon mat-list-icon>{{ theme.icon }}</mat-icon>
+                <h3 matLine>{{ theme.name }}</h3>
+                <mat-icon *ngIf="colorSchemeService.currentActive() === theme.name">check</mat-icon>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-menu>
 </mat-toolbar>
