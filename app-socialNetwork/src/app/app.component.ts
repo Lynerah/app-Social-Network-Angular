@@ -10,10 +10,10 @@ import { UserColorPreferenceService } from './shared/user-color-preference.servi
 })
 export class AppComponent {
 
-  constructor(private colorSchemeService: UserColorPreferenceService) {
-    // Load Color Scheme
-    this.colorSchemeService.load();
-  }
+  // constructor(private colorSchemeService: UserColorPreferenceService) {
+  //   // Load Color Scheme
+  //   this.colorSchemeService.load();
+  // }
   // isChecked: boolean = false;
   // mode: string = 'light_mode';
   // title = 'app-socialNetwork';
